@@ -7,9 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', async (req, res) => {
+app.get('/get-users', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM users');
+        const result = await pool.query(`SELECT * FROM users`);
         res.json(result.rows);
     } catch (err) {
         
@@ -18,10 +18,11 @@ app.get('/', async (req, res) => {
 
 app.post('/add-user', async (req, res) => { 
     try {
-        const { name, email } = req.body;
+
+        const { id, name } = req.body;
         const result = await pool.query(
-            'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-            [name, email]
+            `INSERT INTO users (id, name) VALUES ($1, $2) RETURNING *`,
+            [id, name]
         );
         res.json(result.rows[0]);
     } catch (err) {
